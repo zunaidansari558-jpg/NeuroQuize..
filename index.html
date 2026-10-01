@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b18">
+  <title>NeuroQuiz | CS Challenge</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+</head>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js");
+    });
+  }
+</script>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#">
+      <div class="brand-icon">N</div>
+      <span>NEURO<span class="accent">QUIZ</span></span>
+    </a>
+    <div class="top-right">
+      <span class="live-dot"></span>
+      <span class="top-label">CS KNOWLEDGE ARENA</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Welcome screen -->
+    <section id="home" class="screen home-screen">
+      <div class="hero-tag">
+        <span>✦</span> THE ULTIMATE CS CHALLENGE
+      </div>
+
+      <h1>Think <span class="gradient-text">Faster.</span><br>
+        Code <span class="gradient-text">Smarter.</span></h1>
+
+      <p class="hero-desc">
+        Challenge your brain. Test your computer science
+        knowledge. Prove what you're capable of.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-icon">◈</span>
+          <div><strong>15</strong><small>Questions</small></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon purple">◷</span>
+          <div><strong>15 min</strong><small>Time limit</small></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon gold">✦</span>
+          <div><strong>3</strong><small>Difficulty levels</small></div>
+        </div>
+      </div>
+
+      <div class="setup-card">
+        <div class="setup-heading">
+          <div>
+            <h3>Configure your challenge</h3>
+            <p>Choose your preferred difficulty</p>
+          </div>
+          <span class="setup-symbol">⚙</span>
+        </div>
+
+        <div class="difficulty-options">
+          <button class="difficulty active" data-level="all">
+            <span>✧</span> All Levels
+          </button>
+          <button class="difficulty" data-level="easy">
+            <span>◈</span> Beginner
+          </button>
+          <button class="difficulty" data-level="medium">
+            <span>⬡</span> Intermediate
+          </button>
+          <button class="difficulty" data-level="hard">
+            <span>✦</span> Advanced
+          </button>
+        </div>
+
+        <button id="start-btn" class="primary-btn">
+          Start Challenge <span>→</span>
+        </button>
+        <p class="secure-note">⚡ No registration required · Free to play</p>
+      </div>
+      <div class="hero-footer">DESIGNED FOR CURIOUS MINDS <span>✦</span></div>
+    </section>
+
+    <!-- Quiz screen -->
+    <section id="quiz" class="screen quiz-screen hidden">
+      <div class="quiz-header">
+        <button id="exit-btn" class="icon-btn" title="Exit quiz">←</button>
+        <div class="quiz-title">
+          <span class="eyebrow">COMPUTER SCIENCE</span>
+          <h2>Knowledge Arena</h2>
+        </div>
+        <div class="timer-box" id="timer-box">
+          <span>◷</span>
+          <strong id="timer">60</strong>
+          <small>SEC</small>
+        </div>
+      </div>
+
+      <div class="progress-info">
+        <span id="question-count">QUESTION 01 / 15</span>
+        <span id="progress-percent">7% COMPLETED</span>
+      </div>
+      <div class="progress-track">
+        <div id="progress-bar"></div>
+      </div>
+
+      <div class="quiz-meta">
+        <span id="category" class="category-pill">PROGRAMMING</span>
+        <span id="difficulty-label" class="level-pill">BEGINNER</span>
+        <span class="points-label">✦ +100 XP</span>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number" id="q-number">01</div>
+        <h2 id="question-text">Loading question...</h2>
+        <p class="select-hint">SELECT THE CORRECT ANSWER</p>
+        <div id="options" class="options"></div>
+        <div id="explanation" class="explanation hidden"></div>
+      </div>
+
+      <div class="quiz-bottom">
+        <div class="score-display">
+          <span>✦</span>
+          <div><small>YOUR SCORE</small><strong id="current-score">0 XP</strong></div>
+        </div>
+        <button id="next-btn" class="primary-btn next-btn" disabled>
+          Next Question <span>→</span>
+        </button>
+      </div>
+      <p class="keyboard-note">Choose an answer to continue</p>
+    </section>
+
+    <!-- Result screen -->
+    <section id="result" class="screen result-screen hidden">
+      <div class="result-icon">🏆</div>
+      <span class="eyebrow">CHALLENGE COMPLETED</span>
+      <h1 id="result-title">Outstanding!</h1>
+      <p class="result-desc" id="result-message">
+        You completed the CS challenge.
+      </p>
+
+      <div class="result-card">
+        <div class="score-ring" id="score-ring">
+          <div class="ring-inner">
+            <strong id="percentage">0%</strong>
+            <small>ACCURACY</small>
+          </div>
+        </div>
+
+        <div class="result-stats">
+          <div class="result-stat">
+            <span class="result-dot green"></span>
+            <span>Correct answers</span>
+            <strong id="correct-count">0</strong>
+          </div>
+          <div class="result-stat">
+            <span class="result-dot red"></span>
+            <span>Wrong / Skipped</span>
+            <strong id="wrong-count">0</strong>
+          </div>
+          <div class="result-stat">
+            <span class="result-dot blue"></span>
+            <span>Total XP earned</span>
+            <strong id="total-xp">0</strong>
+          </div>
+          <div class="result-stat">
+            <span class="result-dot purple"></span>
+            <span>Time taken</span>
+            <strong id="time-taken">0:00</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button id="restart-btn" class="primary-btn">
+          ↻ Play Again
+        </button>
+        <button id="review-btn" class="secondary-btn">
+          Review Answers
+        </button>
+      </div>
+    </section>
+
+    <!-- Review screen -->
+    <section id="review" class="screen review-screen hidden">
+      <div class="quiz-header">
+        <button id="back-result" class="icon-btn">←</button>
+        <div class="quiz-title">
+          <span class="eyebrow">YOUR PERFORMANCE</span>
+          <h2>Answer Review</h2>
+        </div>
+      </div>
+      <div id="review-list" class="review-list"></div>
+      <button id="review-home" class="primary-btn">Back to Home →</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>NEUROQUIZ © 2026</span>
+    <span>BUILT FOR THE NEXT GENERATION OF THINKERS</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
